@@ -1,31 +1,65 @@
-<p id="notice"><%= notice %></p>
+<div class='col-md-9'>
 
-<h1>Listing Todos</h1>
+  <h1>Listing Todos</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Is completed</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @todos.each do |todo| %>
+  <table class="table table-striped table-bordered">
+    <thead>
       <tr>
-        <td><%= todo.title %></td>
-        <td><%= todo.description %></td>
-        <td><%= todo.is_completed %></td>
-        <td><%= link_to 'Show', todo %></td>
-        <td><%= link_to 'Edit', edit_todo_path(todo) %></td>
-        <td><%= link_to 'Destroy', todo, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Action</th>
       </tr>
+    </thead>
+    <tbody>
+      <% @todos.each do |todo| %>
+        <tr>
+          <td><%= todo.title %></td>
+          <td><%= todo.description %></td>
+          <td>
+            <input id="is_completed" name="is_completed" type="checkbox" value="1" <%= 'checked' if todo.is_completed %> />
+          </td>
+          <td>
+            <%= link_to '<span class="glyphicon glyphicon-search"></span>'.html_safe, todo, class: 'btn btn-primary' %>
+            <%= link_to '<span class="glyphicon glyphicon-pencil"></span>'.html_safe, edit_todo_path(todo), class: 'btn btn-primary' %>
+            <%= link_to '<span class="glyphicon glyphicon-trash"></span>'.html_safe, todo, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class='col-md-3'>
+
+  <div id="todo_form" class='hide'>
+    <%= form_for(@todo) do |f| %>
+      <% if @todo.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@todo.errors.count, "error") %> prohibited this todo from being saved:</h2>
+          <ul>
+          <% @todo.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :title %><br>
+        <%= f.text_field :title %>
+      </div>
+      <div class="field">
+        <%= f.label :description %><br>
+        <%= f.text_area :description %>
+      </div>
+      <div class="field">
+        <%= f.label :is_completed %><br>
+        <%= f.check_box :is_completed %>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
     <% end %>
-  </tbody>
-</table>
 
-<br>
-
-<%= link_to 'New Todo', new_todo_path %>
+  </div>
+</div>
